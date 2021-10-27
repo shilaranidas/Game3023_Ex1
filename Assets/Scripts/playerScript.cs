@@ -7,6 +7,12 @@ public class playerScript : MonoBehaviour
     [SerializeField] public float moveSpeed = 1.0f;
     [SerializeField]
     public Rigidbody2D rigidbody = null;
+    SavePlayerPos savePlayerPos;
+    private void Awake()
+    {
+        //savePlayerPos = FindObjectOfType<SavePlayerPos>();
+        //savePlayerPos.PlayerPosLoad();
+    }
     // Start is called before the first frame update
     void Start()
     {
