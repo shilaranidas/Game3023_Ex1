@@ -10,7 +10,8 @@ public class playerScript : MonoBehaviour
     SavePlayerPos savePlayerPos;
     [SerializeField]
     private Animator animator;
-    public bool isGrounded=true;
+    public bool isFly=false;
+    public bool isWalking = false;
     private void Awake()
     {
         //savePlayerPos = FindObjectOfType<SavePlayerPos>();
@@ -25,51 +26,48 @@ public class playerScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            isGrounded = false;
-        }
-        else if (Input.GetKeyUp(KeyCode.Space))
-        {
-            isGrounded = true;
-        }
-        if (isGrounded)
-        {
+        //if (Input.GetKeyDown(KeyCode.Space))
+        //{
+        //    isGrounded = false;
+        //}
+        //else if (Input.GetKeyUp(KeyCode.Space))
+        //{
+        //    isGrounded = true;
+        //}
+       
             float inputX = Input.GetAxisRaw("Horizontal");
             float inputY = Input.GetAxisRaw("Vertical");
 
-            if (inputX != 0)
-            {
-                animator.SetBool("IsWalking", true);
-                animator.SetBool("IsFly", false);
-                inputX = FlipVertically(inputX);
-                transform.position += new Vector3(inputX * moveSpeed * Time.deltaTime, inputY * moveSpeed * Time.deltaTime, 0);
-            }
-            else
-            { 
-                animator.SetBool("IsWalking", false);
-                animator.SetBool("IsFly", false);
-            }
+        if (inputX != 0)
+        {
+            isWalking = true;
         }
         else
+            isWalking = false;
+
+        if (transform.position.y > -2.92)
+        {
+            isFly = true;
+            Debug.Log("fly" + isFly);
+        }
+        else 
+        { isFly = false;
+            Debug.Log("fly" + isFly);
+        }
+        animator.SetBool("IsWalking", isWalking);
+        animator.SetBool("IsFly", isFly);
+        if (inputX != 0)
+        {
+            inputX = FlipVertically(inputX);
+            transform.position += new Vector3(inputX * moveSpeed * Time.deltaTime, inputY * moveSpeed * Time.deltaTime, 0);
+        }
+        if (inputY != 0)
         {
 
-            float inputX = Input.GetAxisRaw("Horizontal");
-            float inputY = Input.GetAxisRaw("Vertical");
-
-            if (inputX != 0)
-            {
-                animator.SetBool("IsWalking", true);
-                animator.SetBool("IsFly", true);
-                inputX = FlipVertically(inputX);
-                transform.position += new Vector3(inputX * moveSpeed * Time.deltaTime, inputY * moveSpeed * Time.deltaTime, 0);
-            }
-            else
-            { 
-                animator.SetBool("IsWalking", false);
-                animator.SetBool("IsFly", true);
-            }
+            transform.position += new Vector3(inputX * moveSpeed * Time.deltaTime, inputY * moveSpeed * Time.deltaTime, 0);
         }
+
+
         //rigidbody.velocity = new Vector3(inputX * moveSpeed , inputY * moveSpeed , 0);
     }
     private float FlipVertically(float x)
